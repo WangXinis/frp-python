@@ -4,20 +4,19 @@ import struct
 import selectors
 import lib.ConnTool as ConnTool
 sel = selectors.DefaultSelector()
-
-
+# 代码研究学习 by WangXin
 
 
 class Frpc():
-    def __init__(self, serverhost,serverport, targethost,targetport):
-        self.targethost=targethost
-        self.targetport=targetport
-        self.serverhost=serverhost
-        self.serverport=serverport
-        self.server_fd = socket.create_connection((self.serverhost,self.serverport))
+    def __init__(self, serverhost, serverport,  targethost, targetport):
+        self.targethost = targethost
+        self.targetport = targetport
+        self.serverhost = serverhost
+        self.serverport = serverport
+        self.server_fd = socket.create_connection((self.serverhost, self.serverport))
         self.server_fd.sendall(struct.pack('i', 1))  # 启动时 首次发送心跳包 1
         self.server_fd.setblocking(False)
-        sel.register(self.server_fd,selectors.EVENT_READ,self.handle_controller_data)
+        sel.register(self.server_fd, selectors.EVENT_READ, self.handle_controller_data)
 
         self.workConnPool = []
         threading.Thread(target=self.maitainConPool).start()
@@ -85,6 +84,6 @@ if __name__ == '__main__':
         sys.exit(1)
 
     sys.stdout = open('forwaring.log', 'w')
-    Frpc(remothost,remoteport, targethost,targetport).run()
+    Frpc(remothost, remoteport, targethost,targetport).run()
     print('success started! remote is  %s:%d \t target is %s:%d' % (remothost,remoteport, targethost,targetport))
     # Frpc('192.168.1.101',7000, 'localhost',3389).run()

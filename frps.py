@@ -50,13 +50,13 @@ class Frps(threading.Thread):
             pass
 
 
-    def accept_frp_connection(self,sock, mask):
+    def accept_frp_connection(self, sock, mask):
         frpc_conn, addr = sock.accept()
         frpc_conn.setblocking(False)
         # 注册为可读套接字
         sel.register(frpc_conn, selectors.EVENT_READ, self.handle_controller_data)
 
-    def handle_controller_data(self,frpc_conn, mask):
+    def handle_controller_data(self, frpc_conn, mask):
         # print('frpc',frpc_conn,mask,self.userConns)
         try:
             data = frpc_conn.recv(4)  # Should be ready
